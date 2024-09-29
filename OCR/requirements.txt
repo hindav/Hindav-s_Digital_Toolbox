@@ -6,3 +6,4 @@ easyocr
 reportlab
 python-docx
 opencv-python
+opencv-python-headless
