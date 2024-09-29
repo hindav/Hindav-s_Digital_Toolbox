@@ -5,3 +5,4 @@ numpy
 easyocr
 reportlab
 python-docx
+opencv-python
