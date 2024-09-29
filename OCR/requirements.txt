@@ -1,0 +1,7 @@
+streamlit
+Pillow
+opencv-python
+numpy
+easyocr
+reportlab
+python-docx
