@@ -12,7 +12,8 @@ Hindav's Digital Toolbox is a versatile web application built with Streamlit, of
 - **Image & PDF Resizer**: Resize images and PDFs based on user-defined storage sizes.
 - **Custom Background**: The app features a custom background image for both the main content area and the sidebar with a blur effect.
 
-## Demo
+## Demo 
+You can try the app live at [Hindav's Digital Toolbox](https://hindav-toolbox.streamlit.app/).
 
 You can run the app locally by following the instructions below.
 
