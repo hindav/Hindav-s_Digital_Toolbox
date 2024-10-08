@@ -1,9 +1,0 @@
-streamlit
-Pillow
-opencv-python
-numpy
-easyocr
-reportlab
-python-docx
-opencv-python
-opencv-python-headless
