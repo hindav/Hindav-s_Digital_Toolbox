@@ -1,0 +1,7 @@
+streamlit
+Pillow
+opencv-python-headless
+numpy
+easyocr
+PyPDF2
+reportlab 
