@@ -1,6 +1,6 @@
 Here’s a `README.md` file tailored for your Streamlit app based on the provided code:
 
-```markdown
+
 # Hindav's Digital Toolbox
 
 Hindav's Digital Toolbox is a versatile web application built with Streamlit, offering various tools for image processing, text extraction through OCR, and document conversion. This app is designed for users who need efficient solutions for managing images and PDFs.
@@ -43,14 +43,14 @@ You can run the app locally by following the instructions below.
 
 ## File Structure
 
-```plaintext
+
 hindavs-digital-toolbox/
 │
 ├── app.py               # The main Streamlit application code
 ├── BG.jpg               # The background image for the app
 ├── requirements.txt      # List of required Python packages
 └── README.md            # Project documentation
-```
+
 
 ## Usage Instructions
 
@@ -82,4 +82,4 @@ Developed by [Hindav](https://github.com/hindav).
 ## License
 
 This project is licensed under the MIT License. See the `LICENSE` file for more details.
-```
+
