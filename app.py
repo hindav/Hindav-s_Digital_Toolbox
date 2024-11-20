@@ -1,14 +1,5 @@
 import streamlit as st
 import base64
-import cv2
-import numpy as np
-from PIL import Image
-import easyocr
-import PyPDF2
-from reportlab.pdfgen import canvas
-from reportlab.lib.pagesizes import letter
-import io
-import os
 
 # Function to add background image to the app
 def add_bg_from_local(image_file):
@@ -50,6 +41,18 @@ def add_bg_sidebar_from_local(image_file):
 add_bg_from_local('BG.jpg')
 add_bg_sidebar_from_local('BG.jpg')
 
+
+import streamlit as st
+import cv2
+import numpy as np
+from PIL import Image
+import easyocr
+import PyPDF2
+from reportlab.pdfgen import canvas
+from reportlab.lib.pagesizes import letter
+import io
+import os
+
 # Main application title
 st.title("Hindav's Digital Toolbox")
 
@@ -69,54 +72,50 @@ if app_mode == "OCR Tool":
 
     if uploaded_file is not None:
         with st.spinner("Processing image..."):
-            try:
-                image = Image.open(io.BytesIO(uploaded_file.read()))
+            image = Image.open(io.BytesIO(uploaded_file.read()))
 
-                # Convert image to grayscale for OCR processing
-                image = image.convert('L')
-                image = np.array(image)
-                thresh = cv2.threshold(image, 0, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)[1]
+            # Convert image to grayscale for OCR processing
+            image = image.convert('L')
+            image = np.array(image)
+            thresh = cv2.threshold(image, 0, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)[1]
 
-                # Perform OCR
-                if selected_language == "English":
-                    reader = easyocr.Reader(['en'])
-                elif selected_language == "Hindi":
-                    reader = easyocr.Reader(['hi'])
-                elif selected_language == "Marathi":
-                    reader = easyocr.Reader(['mr'])
-                else:
-                    reader = easyocr.Reader(['en'])
+            # Perform OCR
+            if selected_language == "English":
+                reader = easyocr.Reader(['en'])
+            elif selected_language == "Hindi":
+                reader = easyocr.Reader(['hi'])
+            elif selected_language == "Marathi":
+                reader = easyocr.Reader(['mr'])
+            else:
+                reader = easyocr.Reader(['en'])
 
-                text = reader.readtext(thresh)
-                extracted_text = '\n'.join([item[1] for item in text])
+            text = reader.readtext(thresh)
+            extracted_text = '\n'.join([item[1] for item in text])
 
-                # Display recognized text
-                st.subheader("Recognized Text:")
-                st.write(extracted_text)
+            # Display recognized text
+            st.subheader("Recognized Text:")
+            st.write(extracted_text)
 
-                # Download options
-                download_options = st.expander("Download Options")
-                with download_options:
-                    download_format = st.selectbox("Select the download format", ["PDF", "Word", "TXT"])
+            # Download options
+            download_options = st.expander("Download Options")
+            with download_options:
+                download_format = st.selectbox("Select the download format", ["PDF", "Word", "TXT"])
 
-                    if download_format == "PDF":
-                        c = canvas.Canvas("output.pdf", pagesize=letter)
-                        textobject = c.beginText(50, 750)
-                        for line in extracted_text.splitlines():
-                            textobject.textLine(line)
-                        c.drawText(textobject)
-                        c.showPage()
-                        c.save()
+                if download_format == "PDF":
+                    c = canvas.Canvas("output.pdf", pagesize=letter)
+                    textobject = c.beginText(50, 750)
+                    for line in extracted_text.splitlines():
+                        textobject.textLine(line)
+                    c.drawText(textobject)
+                    c.showPage()
+                    c.save()
 
-                        # Provide download option
-                        file_name = uploaded_file.name.split('.')[0] + " OCR by Hindav.pdf"
-                        with open("output.pdf", "rb") as f:
-                            st.download_button("Download as PDF", f, file_name=file_name)
+                    # Provide download option
+                    file_name = uploaded_file.name.split('.')[0] + " OCR by Hindav.pdf"
+                    with open("output.pdf", "rb") as f:
+                        st.download_button("Download as PDF", f, file_name=file_name)
 
-                        os.remove("output.pdf")
-
-            except Exception as e:
-                st.error(f"An error occurred during OCR: {str(e)}")
+                    os.remove("output.pdf")
 
 # Image to PDF Tool
 elif app_mode == "Image to PDF":
@@ -130,54 +129,51 @@ elif app_mode == "Image to PDF":
 
     if uploaded_file is not None:
         with st.spinner("Loading..."):
-            try:
-                image = Image.open(io.BytesIO(uploaded_file.read()))
+            image = Image.open(io.BytesIO(uploaded_file.read()))
 
-                if toggle:
-                    # Process image for OCR
-                    image = image.convert('L')
-                    image = np.array(image)
-                    thresh = cv2.threshold(image, 0, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)[1]
+            if toggle:
+                # Process image for OCR
+                image = image.convert('RGB')  # Ensure image is in RGB mode for saving as JPEG
+                image = np.array(image)
+                thresh = cv2.threshold(image, 0, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)[1]
 
-                    # OCR processing
-                    reader = easyocr.Reader(['en'])
-                    text = reader.readtext(thresh)
-                    extracted_text = '\n'.join([item[1] for item in text])
+                # OCR processing
+                reader = easyocr.Reader(['en'])
+                text = reader.readtext(thresh)
+                extracted_text = '\n'.join([item[1] for item in text])
 
-                    # Create PDF with extracted text
-                    c = canvas.Canvas("output.pdf", pagesize=letter)
-                    textobject = c.beginText(50, 750)
-                    for line in extracted_text.splitlines():
-                        textobject.textLine(line)
-                    c.drawText(textobject)
-                    c.showPage()
-                    c.save()
+                # Create PDF with extracted text
+                c = canvas.Canvas("output.pdf", pagesize=letter)
+                textobject = c.beginText(50, 750)
+                for line in extracted_text.splitlines():
+                    textobject.textLine(line)
+                c.drawText(textobject)
+                c.showPage()
+                c.save()
 
-                    file_name = uploaded_file.name.split('.')[0] + " PDF by Hindav.pdf"
-                    with open("output.pdf", "rb") as f:
-                        st.download_button("Download as PDF", f, file_name=file_name)
+                file_name = uploaded_file.name.split('.')[0] + " PDF by Hindav.pdf"
+                with open("output.pdf", "rb") as f:
+                    st.download_button("Download as PDF", f, file_name=file_name)
 
-                    os.remove("output.pdf")
-                else:
-                    # Direct image-to-PDF conversion
-                    image_path = "image.jpg"
-                    image.save(image_path)
+                os.remove("output.pdf")
+            else:
+                # Direct image-to-PDF conversion
+                image = image.convert('RGB')  # Convert to RGB mode for JPEG
+                image_path = "image.jpg"
+                image.save(image_path, "JPEG")
 
-                    c = canvas.Canvas("output.pdf", pagesize=letter)
-                    c.drawImage(image_path, 0, 0, width=letter[0], height=letter[1])
-                    c.showPage()
-                    c.save()
+                c = canvas.Canvas("output.pdf", pagesize=letter)
+                c.drawImage(image_path, 0, 0, width=letter[0], height=letter[1])
+                c.showPage()
+                c.save()
 
-                    os.remove(image_path)
+                os.remove(image_path)
 
-                    file_name = uploaded_file.name.split('.')[0] + " PDF by Hindav.pdf"
-                    with open("output.pdf", "rb") as f:
-                        st.download_button("Download as PDF", f, file_name=file_name)
+                file_name = uploaded_file.name.split('.')[0] + " PDF by Hindav.pdf"
+                with open("output.pdf", "rb") as f:
+                    st.download_button("Download as PDF", f, file_name=file_name)
 
-                    os.remove("output.pdf")
-
-            except Exception as e:
-                st.error(f"An error occurred during image-to-PDF conversion: {str(e)}")
+                os.remove("output.pdf")
 
 # Image & PDF Resizer
 elif app_mode == "Image & PDF Resizer":
