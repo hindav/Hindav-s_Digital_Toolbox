@@ -1,7 +1,8 @@
 streamlit
 Pillow
-opencv-python-headless
 numpy
+opencv-python
 easyocr
 PyPDF2
-reportlab 
+pytesseract
+reportlab
