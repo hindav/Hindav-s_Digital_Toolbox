@@ -1,5 +1,4 @@
-Here’s a `README.md` file tailored for your Streamlit app based on the provided code:
-
+![Demo](demo.gif)
 
 # Hindav's Digital Toolbox
 
